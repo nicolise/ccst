@@ -8,7 +8,7 @@
 rm(list=ls())
 setwd("~/Projects/ccst")
 #read in files
-olddat <- read.csv("data/DataExtract_05282020.csv")
+olddat <- read.csv("data/DataExtract_05282020_ed.csv")
 myzip <- read.csv("data/ziplookup_CAonly.csv")
 mydist <- read.csv("data/CCDistrictOfficeList.csv")
 head(mydist)
@@ -56,12 +56,29 @@ aggdat.test <- merge(aggdat.w1, aggdat.w2, by="Www")
 #turn lists to characters
 aggdat.test$name <- paste(aggdat.test$name)
 aggdat.test$naicscode <- paste(aggdat.test$naicscode)
-write.csv(aggdat.test, "data/aggdat_set1_test.csv") #this mostly works if you remove quotes and slashes and fix commas after. and remove NULLs. BUT some NAICS data entry seems wrong
+#write.csv(aggdat.test, "data/aggdat_set1_test.csv") #this mostly works if you remove quotes and slashes and fix commas after. and remove NULLs. BUT some NAICS data entry seems wrong
+#fixed NAICS data entry in ---...-ed.csv file: some NAICS had reformatted to scientific notation
 
-library(plyr)
-aggdat.w3 <- ddply(aggdat, .(Www), summarise, naics = naicscode)
-aggdat.w4 <- ddply(aggdat, .(Www), summarise, busname = list(as.character(name.1)))
+#------------------------------------------------------------------------------------------------------
+#sub out c(, ), ", \, space
+# aggdat.w3$naics <- gsub('c(','', aggdat.w3$naics)
+# aggdat.w3$naics <- gsub(')','', aggdat.w3$naics)
+# aggdat.w3$naics <- gsub('"','', aggdat.w3$naics)
+# aggdat.w3$naics <- gsub('"\"','', aggdat.w3$naics)
+# do this in excel for now
 
+shortdat.full <- merge(shortdat1, aggdat.test, by="Www")
+#shortdat.final <- shortdat.full
+#shortdat.final$naics <- as.character(shortdat.final)
+#testdat <- as.character(shortdat.full)
+
+#fix up testdat column orders for template
+cleandat <- shortdat.full[,c(4,5,15,18,9,7,8,11,12,13,26,29)]
+
+write.csv(cleandat, "data/cleandata_set001_draft3.csv")
+
+#---------------------------------------------------------------------------------------------------------
+#now combine zip data with DF ... do this later
 
 myzip.w <- aggregate(zip ~ primary_city, data=myzip.mt, c)
 myzip.w$CACITY <- toupper(myzip.w$primary_city)
@@ -70,16 +87,3 @@ myzip.w <- myzip.w[,c(3,2)]
 mydist.zip <- merge(mydist,myzip.w, by="CACITY")
 #convert list to characters
 mydist.zip$zip <- paste(mydist.zip$zip)
-
-#sub out c(, ), ", \, space
-# aggdat.w3$naics <- gsub('c(','', aggdat.w3$naics)
-# aggdat.w3$naics <- gsub(')','', aggdat.w3$naics)
-# aggdat.w3$naics <- gsub('"','', aggdat.w3$naics)
-# aggdat.w3$naics <- gsub('"\"','', aggdat.w3$naics)
-# do this in excel for now
-
-aggdat.all <- merge(aggdat.w3, aggdat.w4, by='Www')
-shortdat.full <- merge(shortdat1, aggdat.all, by="Www")
-shortdat.final <- shortdat.full
-shortdat.final$naics <- as.character(shortdat.final)
-write.csv(as.character(shortdat.full), "data/cleandata_set001_draft1.csv")

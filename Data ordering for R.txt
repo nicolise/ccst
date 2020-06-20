@@ -1,0 +1,28 @@
+Current data set -- order for final sheet
+
+col 4 entity name - 1
+> plus add City of or County of, etc.
+2
+3
+4
+col 5 contact name - 5
+col 15 contact email - 6
+7
+8
+col 18 contact url - 9
+10
+11
+12
+col 9 city - 13
+col 7 street 1 - 14
+col 8 street 2 - 15
+col 11 zip - 16
+col 12 phone - 17
+col 13 phone ext - 18
+19
+col 26 form name - 20
+21
+col 29 naics - 22
+23
+24
+25

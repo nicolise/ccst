@@ -1,0 +1,6 @@
+when updating a record: get record *to delete* from Carlos' loaded file that he sent back
+
+be sure to REMOVE spaces at ends of URLs
+
+and MAKE SURE URLs are plain text in excel, currently Carlos is having trouble with these- something else is stored in these cells
+hidden newline in excel??? hidden space???
